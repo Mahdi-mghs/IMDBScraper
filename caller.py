@@ -1,6 +1,9 @@
 from scraper import Scraper
+import warnings
 
-crawler = Scraper()
-crawler.base_info()
-# crawler.extract_mainpage()
-crawler.extract_moviepage('tt0118799')
+if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
+    scraper = Scraper()
+    scraper.extract_mainpage()
+    scraper.iterating()
+    scraper.save_file()
