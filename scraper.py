@@ -13,7 +13,7 @@ import pandas as pd
 class Scraper():
 
     MAINDOMAIN = 'https://www.imdb.com/'
-
+    
     def __init__(self, browser= "chrome", os= "win"):
         self.date = datetime.now()
         self.agent = Headers(browser= browser,
@@ -57,7 +57,7 @@ class Scraper():
             print(response.text)
             exit(1)
 
-        for i in range(5): #range(self.number)
+        for i in range(self.number): #range(self.number)
             movie = self.movies['itemListElement'][i]
             self.dataframe['title'].append(movie['item']['name'])
             # print(movie['item']['name'])
@@ -76,6 +76,7 @@ class Scraper():
 
 
     def extract_movie_page(self, film_id, index=None):
+        self.agent =  Headers(headers=True).generate()
         response = requests.get(self.MAINDOMAIN + f'title/{film_id}/', headers=self.agent, verify=False)
         pattern = r'<script type="application/ld\+json">\s*(\{.*?\})\s*</script>'
         match = re.search(pattern, response.text, re.DOTALL)
@@ -154,19 +155,19 @@ class Scraper():
             else:
                 continue
 
-            if int(self.number/4) or int(self.number/2) == counter:
+            if counter in [70, 145, 210]:
                 sleep(10)
 
             # counter += 1
             # For testing purposes
-            if counter >= 5:
-                break
+            # if counter >= 5:
+            #     break
             counter += 1
 
     def save_file(self):
 
-        for key, value in self.dataframe.items():
-            print(f"{key}: {len(value)}")
+        # for key, value in self.dataframe.items():
+        #     print(f"{key}: {len(value)}")
             
         # Save JSON file
         with open(f'ExtractedData/{self.date.date()}_IMDB{self.number}.json', 'w', encoding='utf-8') as f:
@@ -176,6 +177,8 @@ class Scraper():
         df = pd.DataFrame(self.dataframe)
         df.to_csv(f'ExtractedData/{self.date.date()}_IMDB{self.number}.csv', index=False, encoding='utf-8')
 
+        print("Scraping Completed!")
+        print(f"Saved {self.date.date()}_IMDB{self.number}.csv")
         # Save CSV file
         # with open(f'ExtractedData/{self.date.date()}_IMDB{self.number}.csv', 'w', newline='', encoding='utf-8') as f:
         #     writer = csv.writer(f)
