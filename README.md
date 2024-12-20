@@ -96,6 +96,7 @@ scraper.save_file()
 
 ```
 IMDBScraper/
+├── caller.py        # Run to start process
 ├── scraper.py       # Main scraping logic
 ├── requirements.txt # List of dependencies
 ├── ExtractedData/   # Directory to store output files
